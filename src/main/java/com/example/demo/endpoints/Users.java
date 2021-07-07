@@ -1,0 +1,35 @@
+package com.example.demo.endpoints;
+
+import com.example.demo.model.User;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController("/api/users")
+public class Users {
+
+    @GetMapping
+    public ResponseEntity getAll(@RequestParam String name,
+                                 @RequestParam int pageSize,
+                                 @RequestParam int page) {
+        return null;
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity getUser(@PathVariable int id){return null;}
+    @PutMapping("/{id}")
+    public ResponseEntity editUser(@PathVariable int id, @RequestParam User user){return null;}
+    @DeleteMapping("/{id}")
+    public ResponseEntity deleteUser(@PathVariable int id){return null;}
+    @GetMapping("/profile")
+    public ResponseEntity getMyProfile(){return null;}
+    @PostMapping("/profile")
+    public ResponseEntity editMyProfile(){return null;}
+    @PostMapping("/profile/changePassword")
+    public ResponseEntity changeMyPassword(@RequestBody String currentPassword, @RequestBody String newPassword){return null;}
+    @PostMapping("/add")
+    public ResponseEntity addUser(@RequestBody User user){return null;}
+    @PostMapping("/addList")
+    public ResponseEntity addUsers(@RequestBody List<User> users){return null;}
+}
