@@ -3,7 +3,8 @@ package com.example.demo.endpoints;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@RestController("/api/timetables")
+@RestController
+@RequestMapping("/api/timetables")
 public class TimeTables {
 
     @GetMapping

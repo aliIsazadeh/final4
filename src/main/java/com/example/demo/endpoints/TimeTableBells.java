@@ -4,7 +4,8 @@ package com.example.demo.endpoints;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@RestController("/api/timetablebells")
+@RestController
+@RequestMapping("/api/timetablebells")
 public class TimeTableBells {
     @GetMapping
     public ResponseEntity getAll(@RequestParam int pageSize, @RequestParam int page) {
@@ -22,5 +23,7 @@ public class TimeTableBells {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity deleteTBB(@PathVariable("id") int id){return null;}
+    public ResponseEntity deleteTBB(@PathVariable("id") int id) {
+        return null;
+    }
 }
