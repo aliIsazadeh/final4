@@ -1,6 +1,8 @@
 package com.example.demo.security;
 
 
+import com.example.demo.JWT.JwtTokenVerifier;
+import com.example.demo.JWT.JwtUserNameAndPasswordAuthenticationFilter;
 import com.example.demo.auth.ApplicationUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -13,6 +15,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
@@ -40,6 +43,11 @@ public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapt
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .csrf().disable()
+                .sessionManagement()
+                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .addFilter(new JwtUserNameAndPasswordAuthenticationFilter(authenticationManager()))
+                .addFilterAfter(new JwtTokenVerifier(),JwtUserNameAndPasswordAuthenticationFilter.class)
                 .authorizeRequests()
                 .antMatchers("/","index","/css/*","/js/*","/**").permitAll()
                 .antMatchers("/api/**").hasRole(STUDENT.name())
@@ -48,22 +56,8 @@ public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapt
 //                .antMatchers(HttpMethod.PUT,"/management/api/**").hasAuthority(COURSE_WRITE.getPermission())
 //                .antMatchers(HttpMethod.GET,"/management/api/**").hasAnyRole(ADMIN.name(),ADMIN_READ.name())
                 .anyRequest()
-                .authenticated()
-                .and()
-                .formLogin()
-                .loginPage("/login").permitAll()
-                .defaultSuccessUrl("/courses",true)
-                .and()
-                .rememberMe()//default for 2 week
-                    .tokenValiditySeconds((int) TimeUnit.DAYS.toSeconds(24))
-                    .key("someSecurePassword")
-                .and()
-                .logout()
-                    .logoutUrl("/logout")
-                    .logoutRequestMatcher(new AntPathRequestMatcher("/logout" , "GET"))
-                    .clearAuthentication(true)
-                    .deleteCookies("JSESSIONID" , "remember-me")
-                    .logoutSuccessUrl("/login");
+                .authenticated();
+
 
 //        http.addFilterAfter(
 //                new CSRFFilter(),

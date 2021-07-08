@@ -1,5 +1,6 @@
-package com.example.demo.student;
+package com.example.demo.controller;
 
+import com.example.demo.student.Student;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.PathVariable;

@@ -22,5 +22,5 @@ public class User {
     private String code;
     private String phoneNum;
     @Enumerated(EnumType.STRING)
-    private Roles role;
+    private Roles Role;
 }

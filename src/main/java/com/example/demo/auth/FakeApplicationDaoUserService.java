@@ -5,8 +5,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-import java.util.Optional;
+import java.lang.reflect.Array;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 import static com.example.demo.security.ApplicationUsersRole.*;
@@ -34,7 +36,7 @@ public class FakeApplicationDaoUserService implements ApplicationUserDao{
                 new ApplicationUser(
                          "Amin"
                         ,passwordEncoder.encode("password")
-                        ,STUDENT.getGrantedAuthority(),
+                        ,Stream.concat(STUDENT.getGrantedAuthority().stream(),ADMIN.getGrantedAuthority().stream()).collect(Collectors.toSet()),
                         true
                         ,true
                         ,true
