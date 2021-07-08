@@ -60,7 +60,7 @@ public class JwtUserNameAndPasswordAuthenticationFilter extends UsernamePassword
                 .setExpiration(java.sql.Date.valueOf(LocalDate.now().plusWeeks(1)))
                 .signWith(Keys.hmacShaKeyFor(key.getBytes(StandardCharsets.UTF_8)))
                 .compact();
-        response.addHeader("Authorization","Bearer"+token);
+        response.addHeader("Authorization","Bearer "+token);
         System.out.println(token);
 
     }
