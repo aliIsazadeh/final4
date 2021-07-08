@@ -1,6 +1,7 @@
 package com.example.demo.security;
 
 
+import com.example.demo.JWT.JwtTokenVerifier;
 import com.example.demo.JWT.JwtUserNameAndPasswordAuthenticationFilter;
 import com.example.demo.auth.ApplicationUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +47,7 @@ public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapt
                  .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .addFilter(new JwtUserNameAndPasswordAuthenticationFilter(authenticationManager()))
+                .addFilterAfter(new JwtTokenVerifier(),JwtUserNameAndPasswordAuthenticationFilter.class)
                 .authorizeRequests()
                 .antMatchers("/","index","/css/*","/js/*").permitAll()
                 .antMatchers("/api/**").hasRole(STUDENT.name())
