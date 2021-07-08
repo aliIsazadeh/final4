@@ -52,7 +52,7 @@ public class JwtUserNameAndPasswordAuthenticationFilter extends UsernamePassword
                                             HttpServletResponse response,
                                             FilterChain chain,
                                             Authentication authResult) throws IOException, ServletException {
-        String key="IamAWindows:)";
+        String key="IamAWindows:)jafarkaritnadarammankhargoshamvabiazaram";
         String token =Jwts.builder()
                 .setSubject(authResult.getName())
                 .claim("authorities",authResult.getAuthorities())
@@ -61,6 +61,7 @@ public class JwtUserNameAndPasswordAuthenticationFilter extends UsernamePassword
                 .signWith(Keys.hmacShaKeyFor(key.getBytes(StandardCharsets.UTF_8)))
                 .compact();
         response.addHeader("Authorization","Bearer"+token);
+        System.out.println(token);
 
     }
 }
