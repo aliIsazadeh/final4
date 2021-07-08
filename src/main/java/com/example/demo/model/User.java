@@ -13,7 +13,7 @@ public class User {
     private int id;
     private String FirstName;
     private String LastName;
-    private String code;
+    private String userName;
     private int phoneNum;
     @Enumerated(EnumType.STRING)
     private Roles Role;
