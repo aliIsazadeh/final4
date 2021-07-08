@@ -6,7 +6,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
-@RestController("/api/courses")
+@RestController
+@RequestMapping("/api/courses")
 public class Courses {
     @GetMapping()
     public ResponseEntity getCourses(@RequestParam String search,

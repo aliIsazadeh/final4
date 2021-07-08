@@ -5,7 +5,8 @@ import com.example.demo.model.Bell;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@RestController("/api/bells")
+@RestController
+@RequestMapping("/api/bells")
 public class Bells {
 
 
