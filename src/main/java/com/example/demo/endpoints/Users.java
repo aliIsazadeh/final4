@@ -6,7 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/users")
@@ -16,10 +18,13 @@ public class Users {
     private UsersService usersService;
 
     @GetMapping
-    public ResponseEntity getAll(@RequestParam String name,
-                                 @RequestParam int pageSize,
-                                 @RequestParam int page) {
-        return null;
+    public ResponseEntity getAll() {
+        Map<String, Object> data = new HashMap<>();
+        data.put("list", usersService.getUsers());
+        data.put("pageSize",1);
+        data.put("page",1);
+        data.put("totalPage",1);
+        return ResponseEntity.ok(data);
     }
 
     @GetMapping("/{id}")

@@ -7,7 +7,6 @@ import org.springframework.web.client.RestTemplate;
 public class OTP {
 
     private final String USER_AGENT = "Mozilla/5.0";
-
     private String phoneNumber = "";
     private String message = "";
 

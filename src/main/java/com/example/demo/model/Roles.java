@@ -1,7 +1,12 @@
 package com.example.demo.model;
 
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.util.Arrays;
 
+@NoArgsConstructor
 public enum Roles {
     STUDENT("STUDENT"), MASTER("MASTER"), ADMIN("ADMIN"), USER("USER");
     private String value;
