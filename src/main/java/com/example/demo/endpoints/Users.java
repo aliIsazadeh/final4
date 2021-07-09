@@ -3,12 +3,14 @@ package com.example.demo.endpoints;
 import com.example.demo.model.User;
 import com.example.demo.services.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/users")
@@ -18,13 +20,18 @@ public class Users {
     private UsersService usersService;
 
     @GetMapping
-    public ResponseEntity getAll() {
+    public ResponseEntity getAll(@RequestParam(required = false, defaultValue = "") String name,
+                                 @RequestParam(required = false, defaultValue = "10") int pageSize,
+                                 @RequestParam(required = false, defaultValue = "0") int page) {
         Map<String, Object> data = new HashMap<>();
-        data.put("list", usersService.getUsers());
-        data.put("pageSize",1);
-        data.put("page",1);
-        data.put("totalPage",1);
+        Page<User> resultPage= usersService.getUsers(name,pageSize,page);
+        List<User> users = resultPage.stream().collect(Collectors.toList());
+        data.put("list", users);
+        data.put("pageSize", resultPage.getNumberOfElements());
+        data.put("page", resultPage.getNumber());
+        data.put("totalPage", resultPage.getTotalPages());
         return ResponseEntity.ok(data);
+
     }
 
     @GetMapping("/{id}")

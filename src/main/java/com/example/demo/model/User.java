@@ -19,8 +19,13 @@ public class User {
     private int id;
     private String firstName;
     private String lastName;
+    private String username;
     private String code;
     private String phoneNum;
     @Enumerated(EnumType.STRING)
-    private Roles Role;
+    private Roles role;
+
+    public String getName(){
+        return getFirstName()+" "+getLastName();
+    }
 }
