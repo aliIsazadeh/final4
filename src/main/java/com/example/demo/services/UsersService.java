@@ -40,10 +40,10 @@ public class UsersService {
 
     public List<User> getUsers() {
         List<User> users = new ArrayList<>();
-        users.add(User.builder().firstName("fatemeh").lastName("ghafouri").phoneNum("09146633942").Role(Roles.ADMIN).build());
-        users.add(User.builder().firstName("ali").lastName("forghani").phoneNum("09145030651").Role(Roles.MASTER).build());
-        users.add(User.builder().firstName("amme").lastName("ghafouri").phoneNum("09140099000").Role(Roles.STUDENT).build());
-        users.add(User.builder().firstName("komeil").lastName("ghafouri").phoneNum("09140000000").Role(Roles.STUDENT).build());
+        users.add(User.builder().firstName("fatemeh").lastName("ghafouri").phoneNum("09146633942").role(Roles.ADMIN).build());
+        users.add(User.builder().firstName("ali").lastName("forghani").phoneNum("09145030651").role(Roles.MASTER).build());
+        users.add(User.builder().firstName("amme").lastName("ghafouri").phoneNum("09140099000").role(Roles.STUDENT).build());
+        users.add(User.builder().firstName("komeil").lastName("ghafouri").phoneNum("09140000000").role(Roles.STUDENT).build());
         userRepo.saveAll(users);
 //        return userRepo.findAll();
 
