@@ -87,12 +87,12 @@ public class UsersService implements UserDetailsService {
 
     private User setUsername(User user) {
         long count = userRepo.count();
-        user.setUsername(Long.toString(985360000 + count + 1));
+        user.setUserName(Long.toString(985360000 + count + 1));
         return user;
     }
 
     public User deleteUser(String username) {
-        User user = userRepo.findByUsername(username).orElse(null);
+        User user = userRepo.findByUserName(username).orElse(null);
         if (user == null)
             return null;
         else
