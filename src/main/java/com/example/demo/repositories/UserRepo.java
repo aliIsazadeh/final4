@@ -14,5 +14,5 @@ import java.util.Optional;
 @Repository
 public interface UserRepo extends JpaRepository<User,Integer>, PagingAndSortingRepository<User,Integer> {
     Page<User> findByFirstNameContainsOrLastNameContains(String firstName, String lastName ,Pageable pageable);
-    Optional<User> findByUsername(String username);
+    Optional<User> findByUserName(String userName);
 }

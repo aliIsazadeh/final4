@@ -4,7 +4,7 @@ package com.example.demo.security;
 import com.example.demo.JWT.JwtConfig;
 import com.example.demo.JWT.JwtTokenVerifier;
 import com.example.demo.JWT.JwtUserNameAndPasswordAuthenticationFilter;
-import com.example.demo.auth.ApplicationUserService;
+import com.example.demo.services.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -30,13 +30,13 @@ import static com.example.demo.security.ApplicationUsersRole.*;
 public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private final PasswordEncoder passwordEncoder;
-    private final ApplicationUserService applicationUserService;
+    private final com.example.demo.services.UsersService usersService;
     private final SecretKey secretKey;
     private final JwtConfig jwtConfig;
     @Autowired
-    public ApplicationSecurityConfiguration(PasswordEncoder passwordEncoder, ApplicationUserService applicationUserService, SecretKey secretKey, JwtConfig jwtConfig) {
+    public ApplicationSecurityConfiguration(PasswordEncoder passwordEncoder, UsersService usersService, SecretKey secretKey, JwtConfig jwtConfig) {
         this.passwordEncoder = passwordEncoder;
-        this.applicationUserService = applicationUserService;
+        this.usersService = usersService;
         this.secretKey = secretKey;
         this.jwtConfig = jwtConfig;
     }
@@ -62,6 +62,8 @@ public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapt
                 .authenticated();
 
 
+
+
 //        http.addFilterAfter(
 //                new CSRFFilter(),
 //                CsrfFilter.class
@@ -77,7 +79,7 @@ public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapt
     public DaoAuthenticationProvider daoAuthenticationProvider(){
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
         provider.setPasswordEncoder(passwordEncoder);
-        provider.setUserDetailsService(applicationUserService);
+        provider.setUserDetailsService(usersService);
         return provider;
 
     }

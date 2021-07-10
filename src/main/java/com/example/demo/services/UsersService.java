@@ -4,21 +4,36 @@ package com.example.demo.services;
 import com.example.demo.model.Roles;
 import com.example.demo.model.User;
 import com.example.demo.repositories.UserRepo;
+import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
+
+import static com.example.demo.model.Roles.ADMIN;
+import static com.example.demo.model.Roles.MASTER;
+
 
 @Service
-public class UsersService {
+public class UsersService implements UserDetailsService {
+
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
     private UserRepo userRepo;
+
+    @Autowired
+    public UsersService(PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
+    }
+
 
     public User addUser(User user) {
         return userRepo.saveAndFlush(user);
@@ -35,21 +50,33 @@ public class UsersService {
             return userRepo.save(newUser);
     }
 
-    public User getUser(int userid) {
-        return userRepo.findById(userid).stream().findFirst().orElse(null);
+
+
+    public User getUser(String userName) {
+        return userRepo.findByUserName(userName).stream().findFirst().orElse(null);
     }
 
     public List<User> getUsers() {
-        List<User> users = new ArrayList<>();
-        users.add(User.builder().firstName("fatemeh").lastName("ghafouri").phoneNum("09146633942").role(Roles.ADMIN).build());
-        users.add(User.builder().firstName("ali").lastName("forghani").phoneNum("09145030651").role(Roles.MASTER).build());
-        users.add(User.builder().firstName("amme").lastName("ghafouri").phoneNum("09140099000").role(Roles.STUDENT).build());
-        users.add(User.builder().firstName("komeil").lastName("ghafouri").phoneNum("09140000000").role(Roles.STUDENT).build());
-        users = users.stream().map(this::setUsername).map(userRepo::save).collect(Collectors.toList());
-        userRepo.saveAll(users);
-//        return userRepo.findAll();
+        List<User> user = Lists.newArrayList(
+                new User("ali",
+                         passwordEncoder.encode("password"),
+                        ADMIN.getGrantedAuthority(),
+                        "ali",
+                        "forghani",
+                        "0914914914"
+                        )
+                ,new User(
+                        "aliIsassas",
+                        passwordEncoder.encode("password"),
+                        MASTER.getGrantedAuthority(),
+                        "alitfhvg",
+                        "isazadeh",
+                        "0914vhj914914"
 
-        return userRepo.findAll();
+                )
+
+        );
+        return user;
     }
 
     public Page<User> getUsers(String name, int pageSize, int page) {
@@ -73,4 +100,10 @@ public class UsersService {
         return user;
     }
 
+
+    @Override
+    public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
+        return (UserDetails) userRepo.findByUserName(userName)
+                .orElseThrow(() -> new UsernameNotFoundException(String.format("userName %s not found" , userName)));
+    }
 }
