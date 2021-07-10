@@ -12,7 +12,7 @@ import java.util.Set;
 
 @Data
 @Entity
-@Builder
+
 @NoArgsConstructor
 
 public class User {
