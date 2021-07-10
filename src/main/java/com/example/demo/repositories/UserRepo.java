@@ -8,9 +8,11 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
+import java.util.Optional;
 
 @Transactional
 @Repository
 public interface UserRepo extends JpaRepository<User,Integer>, PagingAndSortingRepository<User,Integer> {
     Page<User> findByFirstNameContainsOrLastNameContains(String firstName, String lastName ,Pageable pageable);
+    Optional<User> findByUsername(String username);
 }

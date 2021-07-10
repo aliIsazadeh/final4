@@ -4,6 +4,7 @@ import com.example.demo.model.User;
 import com.example.demo.services.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -41,17 +42,27 @@ public class Users {
 
     @PutMapping("/{id}")
     public ResponseEntity editUser(@PathVariable int id, @RequestParam User user) {
-        return null;
+        User userResult = usersService.editUser(user);
+        if (userResult==null)
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        else
+            return ResponseEntity.ok(userResult);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity deleteUser(@PathVariable int id) {
-        return null;
+        User user = null;
+        if((user=usersService.deleteUser(String.valueOf(id)))==null)
+            return ResponseEntity.ok(user);
+        else
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(user);
+
     }
 
     @GetMapping("/profile")
-    public ResponseEntity getMyProfile() {
-        return null;
+    public ResponseEntity getMyProfile(@RequestHeader("Host") String token) {
+        System.out.println(token);
+        return ResponseEntity.ok(token);
     }
 
     @PostMapping("/profile")

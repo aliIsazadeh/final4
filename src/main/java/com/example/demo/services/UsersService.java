@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UsersService {
@@ -44,6 +45,7 @@ public class UsersService {
         users.add(User.builder().firstName("ali").lastName("forghani").phoneNum("09145030651").role(Roles.MASTER).build());
         users.add(User.builder().firstName("amme").lastName("ghafouri").phoneNum("09140099000").role(Roles.STUDENT).build());
         users.add(User.builder().firstName("komeil").lastName("ghafouri").phoneNum("09140000000").role(Roles.STUDENT).build());
+        users = users.stream().map(this::setUsername).map(userRepo::save).collect(Collectors.toList());
         userRepo.saveAll(users);
 //        return userRepo.findAll();
 
@@ -55,4 +57,20 @@ public class UsersService {
         getUsers();
         return userRepo.findByFirstNameContainsOrLastNameContains(name, name, pageable);
     }
+
+    private User setUsername(User user) {
+        long count = userRepo.count();
+        user.setUsername(Long.toString(985360000 + count + 1));
+        return user;
+    }
+
+    public User deleteUser(String username) {
+        User user = userRepo.findByUsername(username).orElse(null);
+        if (user == null)
+            return null;
+        else
+            userRepo.deleteById(user.getId());
+        return user;
+    }
+
 }
