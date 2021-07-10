@@ -5,23 +5,21 @@ import com.example.demo.model.User;
 import com.example.demo.repositories.UserRepo;
 import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
-import static com.example.demo.model.Roles.ADMIN;
-import static com.example.demo.model.Roles.MASTER;
+import static com.example.demo.model.Roles.*;
 
-
-@Service
-public class UsersService implements UserDetailsService {
+@Repository("org")
+public class UsersService implements UserRepo  {
 
     private final PasswordEncoder passwordEncoder;
 
@@ -71,9 +69,16 @@ public class UsersService implements UserDetailsService {
                         "alitfhvg",
                         "isazadeh",
                         "0914vhj914914"
-
                 )
 
+                ,new User(
+                        "hosseen",
+                        passwordEncoder.encode("password"),
+                        STUDENT.getGrantedAuthority(),
+                        "hos",
+                        "slslsl",
+                        "0952624563"
+                )
         );
         return user;
     }
@@ -84,10 +89,134 @@ public class UsersService implements UserDetailsService {
         return userRepo.findByFirstNameContainsOrLastNameContains(name, name, pageable);
     }
 
+
     @Override
-    public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
-        System.out.println(userName);
-        return (UserDetails) userRepo.findByUserName(userName)
-                .orElseThrow(() -> new UsernameNotFoundException(String.format("userName %s not found" , userName)));
+    public Page<User> findByFirstNameContainsOrLastNameContains(String firstName, String lastName, Pageable pageable) {
+        return null;
+    }
+
+    @Override
+    public Optional<User> findByUserName(String userName) {
+        return Optional.empty();
+    }
+
+    @Override
+    public List<User> findAll() {
+        return null;
+    }
+
+    @Override
+    public List<User> findAll(Sort sort) {
+        return null;
+    }
+
+    @Override
+    public Page<User> findAll(Pageable pageable) {
+        return null;
+    }
+
+    @Override
+    public List<User> findAllById(Iterable<Integer> iterable) {
+        return null;
+    }
+
+    @Override
+    public long count() {
+        return 0;
+    }
+
+    @Override
+    public void deleteById(Integer integer) {
+
+    }
+
+    @Override
+    public void delete(User entity) {
+
+    }
+
+    @Override
+    public void deleteAll(Iterable<? extends User> entities) {
+
+    }
+
+    @Override
+    public void deleteAll() {
+
+    }
+
+    @Override
+    public <S extends User> S save(S entity) {
+        return null;
+    }
+
+    @Override
+    public <S extends User> List<S> saveAll(Iterable<S> iterable) {
+        return null;
+    }
+
+    @Override
+    public Optional<User> findById(Integer integer) {
+        return Optional.empty();
+    }
+
+    @Override
+    public boolean existsById(Integer integer) {
+        return false;
+    }
+
+    @Override
+    public void flush() {
+
+    }
+
+    @Override
+    public <S extends User> S saveAndFlush(S s) {
+        return null;
+    }
+
+    @Override
+    public void deleteInBatch(Iterable<User> iterable) {
+
+    }
+
+    @Override
+    public void deleteAllInBatch() {
+
+    }
+
+    @Override
+    public User getOne(Integer integer) {
+        return null;
+    }
+
+    @Override
+    public <S extends User> Optional<S> findOne(Example<S> example) {
+        return Optional.empty();
+    }
+
+    @Override
+    public <S extends User> List<S> findAll(Example<S> example) {
+        return null;
+    }
+
+    @Override
+    public <S extends User> List<S> findAll(Example<S> example, Sort sort) {
+        return null;
+    }
+
+    @Override
+    public <S extends User> Page<S> findAll(Example<S> example, Pageable pageable) {
+        return null;
+    }
+
+    @Override
+    public <S extends User> long count(Example<S> example) {
+        return 0;
+    }
+
+    @Override
+    public <S extends User> boolean exists(Example<S> example) {
+        return false;
     }
 }
