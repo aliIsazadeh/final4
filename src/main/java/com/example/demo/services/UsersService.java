@@ -97,7 +97,10 @@ public class UsersService implements UserRepo  {
 
     @Override
     public Optional<User> findByUserName(String userName) {
-        return Optional.empty();
+        return getUsers()
+                .stream()
+                .filter(user -> userName.equals(user.getUserName()))
+                .findFirst();
     }
 
     @Override
