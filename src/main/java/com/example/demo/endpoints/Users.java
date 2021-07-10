@@ -49,15 +49,15 @@ public class Users {
             return ResponseEntity.ok(userResult);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity deleteUser(@PathVariable int id) {
-        User user = null;
-        if((user=usersService.deleteUser(String.valueOf(id)))==null)
-            return ResponseEntity.ok(user);
-        else
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(user);
-
-    }
+//    @DeleteMapping("/{id}")
+//    public ResponseEntity deleteUser(@PathVariable int id) {
+//        User user = null;
+//        if((user=usersService.deleteUser(String.valueOf(id)))==null)
+//            return ResponseEntity.ok(user);
+//        else
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(user);
+//
+//    }
 
     @GetMapping("/profile")
     public ResponseEntity getMyProfile(@RequestHeader("Host") String token) {
