@@ -60,7 +60,11 @@ public class UsersService implements UserRepo  {
                         ADMIN.getGrantedAuthority(),
                         "ali",
                         "forghani",
-                        "0914914914"
+                        "0914914914",
+                        true,
+                        true,
+                        true,
+                        true
                         )
                 ,new User(
                         "aliIsassas",
@@ -68,7 +72,11 @@ public class UsersService implements UserRepo  {
                         MASTER.getGrantedAuthority(),
                         "alitfhvg",
                         "isazadeh",
-                        "0914vhj914914"
+                        "0914vhj914914",
+                        true,
+                        true,
+                        true,
+                        true
                 )
 
                 ,new User(
@@ -77,7 +85,12 @@ public class UsersService implements UserRepo  {
                         STUDENT.getGrantedAuthority(),
                         "hos",
                         "slslsl",
-                        "0952624563"
+                        "0952624563",
+                        true,
+                        true,
+                        true,
+                        true
+
                 )
         );
         return user;
