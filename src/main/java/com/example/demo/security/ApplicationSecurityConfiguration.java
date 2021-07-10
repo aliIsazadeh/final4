@@ -22,7 +22,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.crypto.SecretKey;
 
-import static com.example.demo.security.ApplicationUsersRole.*;
+import static com.example.demo.model.Roles.STUDENT;
+
 
 @Configuration
 @EnableWebSecurity
