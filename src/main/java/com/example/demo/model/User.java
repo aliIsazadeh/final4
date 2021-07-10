@@ -11,9 +11,10 @@ import javax.persistence.*;
 import java.util.Collection;
 import java.util.Set;
 
-@Data
-@Entity
 
+
+
+@Entity
 @NoArgsConstructor
 
 public class User implements UserDetails {
@@ -52,12 +53,12 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return grantedAuthorities;
     }
 
     @Override
     public String getUsername() {
-        return null;
+        return userName;
     }
 
     public int getId() {
@@ -102,5 +103,51 @@ public class User implements UserDetails {
 
     public boolean isEnabled() {
         return isEnabled;
+    }
+
+
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setGrantedAuthorities(Set<? extends GrantedAuthority> grantedAuthorities) {
+        this.grantedAuthorities = grantedAuthorities;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public void setPhoneNum(String phoneNum) {
+        this.phoneNum = phoneNum;
+    }
+
+    public void setAccountNonExpired(boolean accountNonExpired) {
+        isAccountNonExpired = accountNonExpired;
+    }
+
+    public void setAccountNonLocked(boolean accountNonLocked) {
+        isAccountNonLocked = accountNonLocked;
+    }
+
+    public void setCredentialsNonExpired(boolean credentialsNonExpired) {
+        isCredentialsNonExpired = credentialsNonExpired;
+    }
+
+    public void setEnabled(boolean enabled) {
+        isEnabled = enabled;
     }
 }
