@@ -12,8 +12,6 @@ import java.util.Collection;
 import java.util.Set;
 
 
-
-
 @Entity
 @NoArgsConstructor
 
@@ -106,7 +104,6 @@ public class User implements UserDetails {
     }
 
 
-
     public void setId(int id) {
         this.id = id;
     }
@@ -151,3 +148,4 @@ public class User implements UserDetails {
         isEnabled = enabled;
     }
 }
+
