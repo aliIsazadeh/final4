@@ -4,7 +4,7 @@ package com.example.demo.security;
 import com.example.demo.JWT.JwtConfig;
 import com.example.demo.JWT.JwtTokenVerifier;
 import com.example.demo.JWT.JwtUserNameAndPasswordAuthenticationFilter;
-import com.example.demo.services.UsersService;
+import com.example.demo.services.ApplicationUserService1;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,7 +22,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.crypto.SecretKey;
 
-import static com.example.demo.security.ApplicationUsersRole.*;
+import static com.example.demo.model.Roles.STUDENT;
+
 
 @Configuration
 @EnableWebSecurity
@@ -30,13 +31,13 @@ import static com.example.demo.security.ApplicationUsersRole.*;
 public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private final PasswordEncoder passwordEncoder;
-    private final com.example.demo.services.UsersService usersService;
+    private final ApplicationUserService1 applicationUserService1;
     private final SecretKey secretKey;
     private final JwtConfig jwtConfig;
     @Autowired
-    public ApplicationSecurityConfiguration(PasswordEncoder passwordEncoder, UsersService usersService, SecretKey secretKey, JwtConfig jwtConfig) {
+    public ApplicationSecurityConfiguration(PasswordEncoder passwordEncoder, ApplicationUserService1 applicationUserService1, SecretKey secretKey, JwtConfig jwtConfig) {
         this.passwordEncoder = passwordEncoder;
-        this.usersService = usersService;
+        this.applicationUserService1 = applicationUserService1;
         this.secretKey = secretKey;
         this.jwtConfig = jwtConfig;
     }
@@ -79,7 +80,7 @@ public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapt
     public DaoAuthenticationProvider daoAuthenticationProvider(){
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
         provider.setPasswordEncoder(passwordEncoder);
-        provider.setUserDetailsService(usersService);
+        provider.setUserDetailsService(applicationUserService1);
         return provider;
 
     }
