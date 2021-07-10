@@ -25,7 +25,7 @@ public class User {
     private String firstName;
     private String password;
     private String lastName;
-    private String username;
+    private String userName;
     private String phoneNum;
 
 
@@ -61,12 +61,12 @@ public class User {
         this.lastName = lastName;
     }
 
-    public String getUsername() {
-        return username;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setUserName(String username) {
+        this.userName = userName;
     }
 
     public String getPhoneNum() {
@@ -79,8 +79,8 @@ public class User {
 
 
 
-    public User(String username,String password, Set<? extends GrantedAuthority> grantedAuthorities, String firstName, String lastName, String phoneNum) {
-        this.username = username;
+    public User(String userName,String password, Set<? extends GrantedAuthority> grantedAuthorities, String firstName, String lastName, String phoneNum) {
+        this.userName = userName;
         this.password = password;
         this.grantedAuthorities = grantedAuthorities;
         this.firstName = firstName;

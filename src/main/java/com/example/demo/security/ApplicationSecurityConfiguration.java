@@ -62,6 +62,8 @@ public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapt
                 .authenticated();
 
 
+
+
 //        http.addFilterAfter(
 //                new CSRFFilter(),
 //                CsrfFilter.class

@@ -52,7 +52,7 @@ public class UsersService implements UserDetailsService {
 
 
     public User getUser(String userName) {
-        return userRepo.findByUsername(userName).stream().findFirst().orElse(null);
+        return userRepo.findByUserName(userName).stream().findFirst().orElse(null);
     }
 
     public List<User> getUsers() {
@@ -86,7 +86,7 @@ public class UsersService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
-        return (UserDetails) userRepo.findByUsername(userName)
+        return (UserDetails) userRepo.findByUserName(userName)
                 .orElseThrow(() -> new UsernameNotFoundException(String.format("userName %s not found" , userName)));
     }
 }
