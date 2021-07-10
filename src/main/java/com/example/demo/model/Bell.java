@@ -27,4 +27,6 @@ public class Bell {
     public void setbellOfDay(int BoD) {
         this.bellOfDay = BoD;
     }
+
+
 }

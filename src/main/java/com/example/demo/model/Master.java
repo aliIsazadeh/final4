@@ -24,6 +24,7 @@ public class Master {
     public void setTimeTableBells(List TTB) {
         this.TimeTableBells = TTB;
     }
+
     public List getTimeTable() {
         return this.TimeTable;
     }
