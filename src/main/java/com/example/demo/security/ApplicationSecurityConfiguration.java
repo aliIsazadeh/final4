@@ -65,7 +65,7 @@ public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapt
                 .anyRequest().authenticated()
                 .and()
                 .addFilter(new JwtUserNameAndPasswordAuthenticationFilter(authenticationManager(), jwtConfig, secretKey))
-                .addFilterBefore(new JwtTokenVerifier(secretKey,jwtConfig),JwtUserNameAndPasswordAuthenticationFilter.class)
+//                .addFilterBefore(new JwtTokenVerifier(secretKey,jwtConfig),JwtUserNameAndPasswordAuthenticationFilter.class)
                 ;
 //                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
 //                .formLogin().loginPage("/login")
