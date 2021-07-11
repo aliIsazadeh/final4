@@ -67,6 +67,11 @@ public class UsersService implements UserDetailsService {
         Pageable pageable = PageRequest.of(page, pageSize);
         return userRepo.findByFirstNameContainsOrLastNameContains(name, name, pageable);
     }
+    public String getNewUsername(){
+        long count = userRepo.count();
+        long base = 985360000;
+        return Long.toString(base+count+1);
+    }
 
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {

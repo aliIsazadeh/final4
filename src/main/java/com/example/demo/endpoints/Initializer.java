@@ -1,5 +1,6 @@
 package com.example.demo.endpoints;
 
+import com.example.demo.JWT.JwtUtil;
 import com.example.demo.model.Role;
 import com.example.demo.model.User;
 import com.example.demo.services.UsersService;
@@ -8,14 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-
-import static com.example.demo.model.Roles.*;
 
 @RestController
 public class Initializer {
@@ -23,11 +20,13 @@ public class Initializer {
     private final UsersService usersService;
 
     private final PasswordEncoder passwordEncoder;
+    private final JwtUtil jwtUtil;
 
     @Autowired
-    public Initializer(PasswordEncoder passwordEncoder, UsersService usersService) {
+    public Initializer(PasswordEncoder passwordEncoder, UsersService usersService, JwtUtil jwtUtil) {
         this.passwordEncoder = passwordEncoder;
         this.usersService = usersService;
+        this.jwtUtil = jwtUtil;
     }
 
     @GetMapping("/init")
@@ -51,5 +50,9 @@ public class Initializer {
     @GetMapping("/all")
     public List<User> getAll(){
         return usersService.getUsers();
+    }   @GetMapping("/test")
+    public String getAll(@RequestHeader("authorization") String token){
+        return jwtUtil.getUsernameFromToken(token);
+
     }
 }
