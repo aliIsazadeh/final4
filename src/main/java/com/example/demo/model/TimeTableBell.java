@@ -1,16 +1,16 @@
 package com.example.demo.model;
 public class TimeTableBell implements Cloneable {
     public int Id;
-    public Day Day;
-    public Bell Bell;
-    public TimeTable TimeTable;
+    public Day day;
+    public Bell bell;
+    public TimeTable timeTable;
 
     public com.example.demo.model.Day getDay() {
-        return Day;
+        return day;
     }
 
     public void setDay(com.example.demo.model.Day day) {
-        Day = day;
+        day = day;
     }
 
     public boolean isSelected() {
@@ -32,19 +32,36 @@ public class TimeTableBell implements Cloneable {
     }
 
     public Bell getBell() {
-        return this.Bell;
+        return this.bell;
     }
 
     public void setBell(Bell BELL) {
-        this.Bell = BELL;
+        this.bell = BELL;
     }
 
     public TimeTable getTimeTable() {
-        return this.TimeTable;
+        return this.timeTable;
     }
 
     public void setTimeTable(TimeTable TT) {
-        this.TimeTable = TT;
+        this.timeTable = TT;
+    }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        TimeTableBell timeTable = new TimeTableBell();
+        timeTable.setBell(this.bell);
+        timeTable.setDay(this.day);
+        return timeTable;
+    }
+
+    public TimeTableBell(Day day, Bell bell) {
+        this.day = day;
+        this.bell = bell;
+    }
+
+    public TimeTableBell() {
+
     }
 
 

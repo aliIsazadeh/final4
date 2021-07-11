@@ -3,10 +3,18 @@ import java.util.List;
 
 public class Course {
     public int Id;
-    public String Title;
-    public int UnitsCount;
+    public String title;
+    public int unitsCount;
     public List<TimeTable> TimeTables;
     public List<Master> Masters;
+
+    public Course(int unitsCount, String title) {
+        this.unitsCount = unitsCount;
+        this.title = title;
+    }
+
+    public Course() {
+    }
 
     public int getId() {
         return this.Id;
@@ -17,19 +25,19 @@ public class Course {
     }
 
     public String getTitle() {
-        return this.Title;
+        return this.title;
     }
 
     public void setTitle(String TT) {
-        this.Title = TT;
+        this.title = TT;
     }
 
     public int getUnitsCount() {
-        return this.UnitsCount;
+        return this.unitsCount;
     }
 
     public void setUnitsCount(int UC) {
-        this.UnitsCount = UC;
+        this.unitsCount = UC;
     }
 
     public List getTimeTable() {

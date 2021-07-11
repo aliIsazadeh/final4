@@ -2,7 +2,7 @@ package com.example.demo.model;
 public class Day {
     public int Id;
     public String Label;
-    public String dayOfWeek;
+    public int dayOfWeek;
 
     public int getId() {
         return this.Id;
@@ -19,12 +19,19 @@ public class Day {
     public void setLabel(String label) {
         this.Label = label;
     }
-    public String getDayOfWeek() {
+    public int getDayOfWeek() {
         return this.dayOfWeek;
     }
 
-    public void setDayOfWeek(String DOW) {
+    public void setDayOfWeek(int DOW) {
         this.dayOfWeek = DOW;
+    }
+
+    public Day(int dayOfWeek) {
+        this.dayOfWeek = dayOfWeek;
+    }
+
+    public Day() {
     }
 
 

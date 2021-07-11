@@ -7,6 +7,7 @@ public class Master {
     public List<TimeTable> TimeTable;
     public List<TimeTableBell> TimeTableBells;
     public List<Course>Courses;
+    public String name ;
 
 
     public int getId() {
@@ -39,5 +40,19 @@ public class Master {
 
     public void setCourses(List<Course> courses) {
         Courses = courses;
+    }
+
+    public Master(String name) {
+        this.name = name;
+    }
+
+    public Master() {
+
+    }
+
+    public String getName() {
+
+
+        return name;
     }
 }

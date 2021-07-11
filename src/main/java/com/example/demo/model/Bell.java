@@ -29,4 +29,10 @@ public class Bell {
     }
 
 
+    public Bell(int bellOfDay) {
+        this.bellOfDay = bellOfDay;
+    }
+
+    public Bell() {
+    }
 }

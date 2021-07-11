@@ -52,5 +52,15 @@ public class TimeTable {
         this.course = CRS;
     }
 
+    @Override
+    public String toString() {
+        return "TimeTable {\n" +
+                "master : " + master.getName() +
+                "\ncourse=" + course.getTitle() +
+                "\ntimeTableBell {\n" + "\t\tday : "+timeTableBells.getDay().getDayOfWeek()
+                +"\n\t\tbell : :"+timeTableBells.getBell().bellOfDay+"\n}\n"+
+                "}\n";
+    }
+
 
 }
