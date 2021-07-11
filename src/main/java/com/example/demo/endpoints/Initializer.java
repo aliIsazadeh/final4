@@ -1,5 +1,6 @@
 package com.example.demo.endpoints;
 
+import com.example.demo.model.Role;
 import com.example.demo.model.User;
 import com.example.demo.services.UsersService;
 import com.google.common.collect.Lists;
@@ -24,58 +25,31 @@ public class Initializer {
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public Initializer(PasswordEncoder passwordEncoder,UsersService usersService) {
+    public Initializer(PasswordEncoder passwordEncoder, UsersService usersService) {
         this.passwordEncoder = passwordEncoder;
         this.usersService = usersService;
     }
 
     @GetMapping("/init")
-    public boolean init(){
+    public boolean init() {
         List<User> user = Lists.newArrayList(
-                new User("1",
-                        passwordEncoder.encode("1"),
-                        ADMIN.getGrantedAuthority(),
-                        "ali",
-                        "forghani",
-                        "0914914914",
-                        true,
-                        true,
-                        true,
-                        true
-                )
-                ,new User(
-                        "2",
-                        passwordEncoder.encode("2"),
-                        MASTER.getGrantedAuthority(),
-                        "alitfhvg",
-                        "isazadeh",
-                        "09149149140",
-                        true,
-                        true,
-                        true,
-                        true
-                )
-
-                ,new User(
-                        "hosseen",
-                        passwordEncoder.encode("password"),
-                        STUDENT.getGrantedAuthority(),
-                        "hos",
-                        "slslsl",
-                        "0952624563",
-                        true,
-                        true,
-                        true,
-                        true
-
-                )
+                User.builder().firstName("ali").lastName("forghani")
+                        .username("1")
+                        .password(passwordEncoder.encode("1")).phoneNum("09145030651").role(Role.ADMIN).build(),
+                User.builder().firstName("ali").lastName("isa").username("2").password(passwordEncoder.encode("2")).role(Role.MASTER).phoneNum("09145032221").build(),
+                User.builder().firstName("fati").lastName("ghafouri").username("3").password(passwordEncoder.encode("3")).role(Role.ADMIN).phoneNum("09146633942").build()
         );
         usersService.addUsers(user);
         return true;
     }
 
-    @GetMapping("/{id}")
-    public User getUser(@PathVariable("id") String id){
+    @GetMapping("/{id}/find")
+    public User getUser(@PathVariable("id") String id) {
         return usersService.getUser(id);
+    }
+
+    @GetMapping("/all")
+    public List<User> getAll(){
+        return usersService.getUsers();
     }
 }

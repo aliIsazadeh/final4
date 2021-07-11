@@ -1,26 +1,13 @@
 package com.example.demo.JWT;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@NoArgsConstructor
 public class JwtUserNameAndPasswordAuthenticationRequest {
-
-    private String userName;
+    private String username;
     private String password;
-
-    public JwtUserNameAndPasswordAuthenticationRequest() {
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
 }

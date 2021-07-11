@@ -1,5 +1,6 @@
 package com.example.demo.JWT;
 
+import com.example.demo.model.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Jwts;
 import org.springframework.boot.configurationprocessor.json.JSONObject;
@@ -28,7 +29,7 @@ public class JwtUserNameAndPasswordAuthenticationFilter extends UsernamePassword
 
     public JwtUserNameAndPasswordAuthenticationFilter(AuthenticationManager authenticationManager,
                                                       JwtConfig jwtConfig,
-                                                      javax.crypto.SecretKey secretKey) {
+                                                      SecretKey secretKey) {
         this.authenticationManager = authenticationManager;
         this.jwtConfig = jwtConfig;
         this.secretKey = secretKey;
@@ -44,11 +45,10 @@ public class JwtUserNameAndPasswordAuthenticationFilter extends UsernamePassword
                     .readValue(request.getInputStream(), JwtUserNameAndPasswordAuthenticationRequest.class);
 
             Authentication authentication = new UsernamePasswordAuthenticationToken(
-                    authenticationRequest.getUserName(),
+                    authenticationRequest.getUsername(),
                     authenticationRequest.getPassword()
             );
-            Authentication authenticate = authenticationManager.authenticate(authentication);
-            return authenticate;
+            return authenticationManager.authenticate(authentication);
 
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -70,10 +70,7 @@ public class JwtUserNameAndPasswordAuthenticationFilter extends UsernamePassword
                 .signWith(secretKey)
                 .compact();
         response.addHeader(jwtConfig.getAuthorizationHeader(), jwtConfig.getTokenPrefix() + token);
-        String role = authResult.getAuthorities()
-                .stream().filter(grantedAuthority -> grantedAuthority.getAuthority()
-                        .contains("ROLE")).findFirst().orElse(null).getAuthority();
-
+        String role = ((User)authResult.getPrincipal()).getRole().getName();
         String username = authResult.getName();
         String expireAt = (java.sql.Date.valueOf(LocalDate.now().plusDays(Long.parseLong(jwtConfig.getTokenExpirationAfterDays())))).toString();
         Map<String, String> data = new HashMap<>();
@@ -85,4 +82,6 @@ public class JwtUserNameAndPasswordAuthenticationFilter extends UsernamePassword
         response.setContentType("application/json");
         response.getWriter().flush();
     }
+
+
 }
