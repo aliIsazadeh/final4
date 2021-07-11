@@ -1,5 +1,7 @@
 package com.example.demo.endpoints;
 
+import com.example.demo.model.Announcement;
+import com.example.demo.services.AnnouncementService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -8,6 +10,9 @@ import javax.websocket.server.PathParam;
 @RestController
 @RequestMapping("/api/announcements")
 public class Announcements {
+    AnnouncementService announcementService= new AnnouncementService();
+    private ResponseEntity responseEntity;
+
 
 
     @GetMapping
@@ -20,14 +25,18 @@ public class Announcements {
 
     @PostMapping
     public ResponseEntity announcements(@RequestBody int timeTableId, @RequestBody String message) {
-        return null;
+        return  ResponseEntity.ok(announcementService.addAnnouncement(timeTableId,message));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity get(@PathParam("id") int id){return null;}
+    public ResponseEntity get(@PathParam("id") int id){
+        return  ResponseEntity.ok(announcementService.getAnnouncementById(id));
+    }
 
 
     @DeleteMapping("/{id}")
-    public ResponseEntity delete(@PathParam("id") int id){return null;}
+    public ResponseEntity delete(@PathParam("id") int id){
+        return ResponseEntity.ok(announcementService.deleteAnnouncementById(id));
+    }
 
 }

@@ -16,4 +16,8 @@ public class Announcement {
     private int timeTableId;
     private String message;
 
+    public Announcement(int timeTableId, String message) {
+        this.timeTableId = timeTableId;
+        this.message = message;
+    }
 }
