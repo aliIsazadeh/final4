@@ -20,4 +20,8 @@ public class Announcement {
         this.timeTableId = timeTableId;
         this.message = message;
     }
+
+    public Announcement() {
+
+    }
 }
