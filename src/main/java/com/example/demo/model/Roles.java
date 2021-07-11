@@ -1,9 +1,6 @@
 package com.example.demo.model;
 
-import com.example.demo.security.ApplicationUsersPermission;
 import com.google.common.collect.Sets;
-import lombok.Builder;
-import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
