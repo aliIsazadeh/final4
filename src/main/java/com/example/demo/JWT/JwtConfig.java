@@ -1,14 +1,9 @@
 package com.example.demo.JWT;
 
 import com.google.common.net.HttpHeaders;
-import io.jsonwebtoken.security.Keys;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
-import javax.crypto.SecretKey;
-import java.nio.charset.StandardCharsets;
 @Component
 @ConfigurationProperties(prefix = "application.jwt")
 public class JwtConfig {

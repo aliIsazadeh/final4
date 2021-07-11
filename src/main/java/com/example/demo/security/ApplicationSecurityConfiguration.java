@@ -4,8 +4,8 @@ package com.example.demo.security;
 import com.example.demo.JWT.JwtConfig;
 import com.example.demo.JWT.JwtTokenVerifier;
 import com.example.demo.JWT.JwtUserNameAndPasswordAuthenticationFilter;
-import com.example.demo.services.ApplicationUserService1;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -17,12 +17,14 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
 
 
 import javax.crypto.SecretKey;
-
-import static com.example.demo.model.Roles.STUDENT;
+import javax.servlet.http.HttpServletResponse;
 
 
 @Configuration
@@ -31,13 +33,16 @@ import static com.example.demo.model.Roles.STUDENT;
 public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private final PasswordEncoder passwordEncoder;
-    private final ApplicationUserService1 applicationUserService1;
     private final SecretKey secretKey;
     private final JwtConfig jwtConfig;
+
+    @Qualifier("usersService")
     @Autowired
-    public ApplicationSecurityConfiguration(PasswordEncoder passwordEncoder, ApplicationUserService1 applicationUserService1, SecretKey secretKey, JwtConfig jwtConfig) {
+    private UserDetailsService userDetailsService;
+
+    @Autowired
+    public ApplicationSecurityConfiguration(PasswordEncoder passwordEncoder, SecretKey secretKey, JwtConfig jwtConfig) {
         this.passwordEncoder = passwordEncoder;
-        this.applicationUserService1 = applicationUserService1;
         this.secretKey = secretKey;
         this.jwtConfig = jwtConfig;
     }
@@ -45,24 +50,36 @@ public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapt
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http
+        http.cors().configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues())
+                .and()
                 .csrf().disable()
                 .sessionManagement()
-                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .exceptionHandling()
+                .authenticationEntryPoint((httpServletRequest, httpServletResponse, e)
+                        -> httpServletResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, e.getMessage()))
+                .and()
+                .authorizeRequests()
+                .antMatchers("/login/**", "/login","/**/find","/**/find/", "/init", "/init/**").permitAll()
+                .anyRequest().authenticated()
                 .and()
                 .addFilter(new JwtUserNameAndPasswordAuthenticationFilter(authenticationManager(), jwtConfig, secretKey))
-                .addFilterAfter(new JwtTokenVerifier(secretKey,jwtConfig),JwtUserNameAndPasswordAuthenticationFilter.class)
-                .authorizeRequests()
-                .antMatchers("/**","index","/css/*","/js/*").permitAll()
-                .antMatchers("/api/**").hasRole(STUDENT.name())
+                .addFilterBefore(new JwtTokenVerifier(secretKey,jwtConfig),JwtUserNameAndPasswordAuthenticationFilter.class)
+                ;
+//                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+//                .formLogin().loginPage("/login")
+//                .and()
+//                .authorizeRequests()
+//                .antMatchers("/**","index","/css/*","/js/*").permitAll()
+//                .antMatchers("/init").permitAll()
+//                .antMatchers("/api/**").hasRole(STUDENT.name())
 //                .antMatchers(HttpMethod.DELETE,"/management/api/**").hasAuthority(COURSE_WRITE.getPermission())
 //                .antMatchers(HttpMethod.POST,"/management/api/**").hasAuthority(COURSE_WRITE.getPermission())
 //                .antMatchers(HttpMethod.PUT,"/management/api/**").hasAuthority(COURSE_WRITE.getPermission())
 //                .antMatchers(HttpMethod.GET,"/management/api/**").hasAnyRole(ADMIN.name(),ADMIN_READ.name())
-                .anyRequest()
-                .authenticated();
-
-
+//                .anyRequest()
+//                .authenticated();
 
 
 //        http.addFilterAfter(
@@ -73,17 +90,15 @@ public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapt
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.authenticationProvider(daoAuthenticationProvider());
+        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
     }
 
     @Bean
-    public DaoAuthenticationProvider daoAuthenticationProvider(){
+    public DaoAuthenticationProvider daoAuthenticationProvider() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
         provider.setPasswordEncoder(passwordEncoder);
-        provider.setUserDetailsService(applicationUserService1);
+        provider.setUserDetailsService(userDetailsService);
         return provider;
-
     }
-
 
 }
