@@ -1,15 +1,16 @@
 package com.example.demo.JWT;
 
 import com.example.demo.model.User;
-import com.example.demo.repositories.UserRepo;
 import com.example.demo.services.UsersService;
 import io.jsonwebtoken.*;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.apache.catalina.connector.ClientAbortException;
+import org.aspectj.lang.annotation.AdviceName;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.crypto.SecretKey;
@@ -18,23 +19,19 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.net.http.HttpResponse;
 
 public class JwtTokenVerifier extends OncePerRequestFilter {
 
     private final SecretKey secretKey;
     private final JwtConfig jwtConfig;
-    @Autowired
-    private UsersService usersService;
-
-    @Autowired
-    private UserRepo userRepo;
+    private final UserDetailsService userDetailsService;
 
 
-    public JwtTokenVerifier(SecretKey secretKey, JwtConfig jwtConfig) {
+    public JwtTokenVerifier(SecretKey secretKey, JwtConfig jwtConfig, UserDetailsService userDetailsService) {
         this.secretKey = secretKey;
         this.jwtConfig = jwtConfig;
+        this.userDetailsService = userDetailsService;
     }
 
     @Override
@@ -59,7 +56,8 @@ public class JwtTokenVerifier extends OncePerRequestFilter {
             Claims body = claimsJws.getBody();
             String username = body.getSubject();
             System.out.println("search for username : "+username);
-            User user = usersService.getUser(username);
+            System.out.println(userDetailsService==null);
+            User user = (User) userDetailsService.loadUserByUsername(username);
 
             Authentication authentication = new UsernamePasswordAuthenticationToken(
                     user,

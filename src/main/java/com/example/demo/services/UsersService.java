@@ -51,7 +51,12 @@ public class UsersService implements UserDetailsService {
 
 
     public User getUser(String username) {
-        return userRepo.findByUsername(username).stream().findFirst().orElse(null);
+        Optional<User> user = userRepo.findByUsername(username);
+        System.out.println("tru to find user:"+username);
+        System.out.println("found User:"+user.isPresent());
+        user.ifPresent(System.out::println);
+
+        return user.orElse(null);
     }
 
     public List<User> getUsers() {

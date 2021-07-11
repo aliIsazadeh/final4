@@ -1,6 +1,7 @@
 package com.example.demo.model;
 
 import lombok.*;
+import org.checkerframework.common.aliasing.qual.Unique;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -27,6 +28,7 @@ public class User implements UserDetails {
     @Getter
     private String lastName;
     @Getter
+    @Unique
     private String username;
     @Getter
     private String password;

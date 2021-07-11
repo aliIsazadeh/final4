@@ -19,7 +19,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 
 
@@ -61,11 +60,11 @@ public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapt
                         -> httpServletResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, e.getMessage()))
                 .and()
                 .authorizeRequests()
-                .antMatchers("/login/**", "/login","/**/find","/**/find/", "/init", "/init/**","/all","/all/**").permitAll()
+                .antMatchers("/login/**", "/login","/**/find","/**/find/", "/init", "/init/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .addFilter(new JwtUserNameAndPasswordAuthenticationFilter(authenticationManager(), jwtConfig, secretKey))
-//                .addFilterBefore(new JwtTokenVerifier(secretKey,jwtConfig),JwtUserNameAndPasswordAuthenticationFilter.class)
+                .addFilterAfter(new JwtTokenVerifier(secretKey,jwtConfig, userDetailsService),JwtUserNameAndPasswordAuthenticationFilter.class)
                 ;
 //                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
 //                .formLogin().loginPage("/login")
