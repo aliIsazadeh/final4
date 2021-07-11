@@ -42,7 +42,7 @@ public class UsersService implements UserDetailsService {
     }
 
     public User editUser(User newUser) {
-        if (userRepo.existsById(newUser.getId()))
+        if (!userRepo.existsById(newUser.getId()))
             return null;
         return userRepo.save(newUser);
     }
@@ -50,10 +50,6 @@ public class UsersService implements UserDetailsService {
 
     public User getUser(String username) {
         Optional<User> user = userRepo.findByUsername(username);
-        System.out.println("tru to find user:" + username);
-        System.out.println("found User:" + user.isPresent());
-        user.ifPresent(System.out::println);
-
         return user.orElse(null);
     }
 

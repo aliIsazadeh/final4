@@ -2,12 +2,12 @@ package com.example.demo.endpoints;
 
 import com.example.demo.JWT.JwtUtil;
 import com.example.demo.model.User;
+import com.example.demo.model.requestBodyModels.EditProfileUser;
 import com.example.demo.services.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -54,12 +54,12 @@ public class Users {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity editUser(@PathVariable int id, @RequestParam User user) {
-        User userResult = usersService.editUser(user);
+    public ResponseEntity editUser(@PathVariable int id, @RequestBody User user) {
+        User userResult = usersService.getUser(String.valueOf(id));
         if (userResult == null)
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         else
-            return ResponseEntity.ok(userResult);
+            return ResponseEntity.ok(usersService.editUser(user));
     }
 
 //    @DeleteMapping("/{id}")
@@ -73,31 +73,32 @@ public class Users {
 //    }
 
     @GetMapping("/profile")
-    public ResponseEntity getMyProfile(@RequestHeader("Host") String token) {
+    public ResponseEntity getMyProfile(@RequestHeader("Authorization") String token) {
         String username = jwtUtil.getUsernameFromToken(token);
         User user = usersService.getUser(username);
         return ResponseEntity.ok(user);
     }
 
     @PostMapping("/profile")
-    public ResponseEntity editMyProfile(@RequestHeader("authorization") String token,
-                                        @RequestBody String firstName,
-                                        @RequestBody String lastName,
-                                        @RequestBody String phoneNumber) {
+    public ResponseEntity editMyProfile(@RequestHeader("authorization") String token,@RequestBody EditProfileUser body) {
         String username = jwtUtil.getUsernameFromToken(token);
         User user = usersService.getUser(username);
-        if (user==null)
+        if (user==null){
+            System.out.println("nikdnscjnsdkjncksdjncs");
             return ResponseEntity.notFound().build();
+        }
         else{
-            user.setFirstName(firstName);
-            user.setLastName(lastName);
-            user.setPhoneNum(phoneNumber);
+            user.setFirstName(body.getFirstName());
+            user.setLastName(body.getLastName());
+            user.setPhoneNum(body.getPhoneNumber());
         }
         return ResponseEntity.ok(usersService.editUser(user));
     }
 
     @PostMapping("/profile/changePassword")
-    public ResponseEntity changeMyPassword(@RequestHeader("authorization") String token,@RequestBody String currentPassword, @RequestBody String newPassword) {
+    public ResponseEntity changeMyPassword(@RequestHeader("Authorization") String token,
+                                           @RequestBody() String currentPassword,
+                                           @RequestBody String newPassword) {
         String username = jwtUtil.getUsernameFromToken(token);
         User user = usersService.getUser(username);
         if (user==null)
@@ -111,6 +112,7 @@ public class Users {
 
     @PostMapping("/add")
     public ResponseEntity<User> addUser(@RequestBody User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         User added = usersService.addUser(user);
         return ResponseEntity.ok(added);
     }
