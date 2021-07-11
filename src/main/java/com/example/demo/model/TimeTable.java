@@ -4,10 +4,10 @@ import java.util.List;
 
 public class TimeTable {
     public int Id;
-    public Master Master ;
-    public List<Student>Students;
-    public List<TimeTableBell> TimeTableBells;
-    public Course Course;
+    public Master master ;
+    public List<Student> students;
+    public TimeTableBell timeTableBells;
+    public Course course;
 
     public int getId() {
         return this.Id;
@@ -18,38 +18,38 @@ public class TimeTable {
     }
 
     public Master getMasters() {
-        return this.Master;
+        return this.master;
     }
 
     public void setMasters(Master MAS) {
-        this.Master = MAS;
+        this.master = MAS;
     }
 
 
     public List getStudents() {
-        return this.Students;
+        return this.students;
     }
 
     public void setStudents(List STU) {
-        this.Students = STU;
+        this.students = STU;
     }
 
 
-    public List getTimeTableBell() {
-        return this.TimeTableBells;
+    public TimeTableBell getTimeTableBell() {
+        return this.timeTableBells;
     }
 
-    public void setTimeTableBells(List TTB) {
-        this.TimeTableBells = TTB;
+    public void setTimeTableBells(TimeTableBell TTB) {
+        this.timeTableBells = TTB;
     }
 
 
     public Course getCourse() {
-        return this.Course;
+        return this.course;
     }
 
     public void setCourse(Course CRS) {
-        this.Course = CRS;
+        this.course = CRS;
     }
 
 
