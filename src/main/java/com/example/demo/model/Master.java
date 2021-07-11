@@ -10,36 +10,34 @@ public class Master {
 
 
     public int getId() {
-        return this.Id;
+        return Id;
     }
 
-    public void setId(int ID) {
-        this.Id = ID;
+    public void setId(int id) {
+        Id = id;
     }
 
-    public List getTimeTableBell() {
-        return this.TimeTableBells;
+    public List<com.example.demo.model.TimeTable> getTimeTable() {
+        return TimeTable;
     }
 
-    public void setTimeTableBells(List TTB) {
-        this.TimeTableBells = TTB;
+    public void setTimeTable(List<com.example.demo.model.TimeTable> timeTable) {
+        TimeTable = timeTable;
     }
 
-    public List getTimeTable() {
-        return this.TimeTable;
+    public List<TimeTableBell> getTimeTableBells() {
+        return TimeTableBells;
     }
 
-    public void setTimeTable(List TT) {
-        this.TimeTable = TT;
+    public void setTimeTableBells(List<TimeTableBell> timeTableBells) {
+        TimeTableBells = timeTableBells;
     }
 
-    public List<Course> getCourse() {
-        return this.Courses;
+    public List<Course> getCourses() {
+        return Courses;
     }
 
-    public void setCourse(List CRS) {
-        this.Courses = CRS;
+    public void setCourses(List<Course> courses) {
+        Courses = courses;
     }
-
-
 }

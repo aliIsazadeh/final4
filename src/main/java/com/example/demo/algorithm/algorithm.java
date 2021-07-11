@@ -1,9 +1,7 @@
 package com.example.demo.algorithm;
 
-import com.example.demo.model.Course;
-import com.example.demo.model.Master;
-import com.example.demo.model.TimeTable;
-import com.example.demo.model.TimeTableBell;
+import com.example.demo.model.*;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,19 +10,25 @@ public class algorithm {
     public static List<TimeTable> timeTables = new ArrayList<>();
     public static void selectTimeTable(Course course, List<TimeTableBell> timeTableBells, Master master) {
 
+        //for each unit one class
         for (int i = 0; i < course.getUnitsCount(); i++) {
             boolean selectTimeTable = false;
 
-            for (TimeTableBell masterTimeTableBell : master.getTimeTableBell() ) {
+
+            for (TimeTableBell masterTimeTableBell : master.getTimeTableBells() ) {
+                //is master have other class in same time
                 if (masterTimeTableBell.isSelected())
                     continue;
+
                 for (TimeTableBell timeTableBell : timeTableBells) {
 
+                    //is selected time table bell same ass master time table bell
                     if (masterTimeTableBell.getDay() == timeTableBell.getDay() && masterTimeTableBell.getBell() == timeTableBell.getBell()) {
                         //
                         TimeTable timeTable = new TimeTable();
                         timeTable.setCourse(course);
                         timeTable.setMasters(master);
+                        //master cant have same class in one day
                         if (!isDuplicateClassInDay(master.getTimeTable(), masterTimeTableBell, course)) {
                             if (master.getTimeTable().size() > 0) {
                                 // whitOut have same course in a day
@@ -71,10 +75,10 @@ public class algorithm {
         }
         return false;
     }
-
+    //start method
     public static void getFinalTimeTable(List<Course> courses, List<TimeTableBell> timeTableBells, List<Master> masters) {
         for (Master master : masters) {
-            for (Course masterSelectedCourse : master.getCourse()) {
+            for (Course masterSelectedCourse : master.getCourses()) {
                 if (isValidCourse(masterSelectedCourse, courses)) {
                     selectTimeTable(masterSelectedCourse, timeTableBells, master);
 
