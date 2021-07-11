@@ -61,7 +61,7 @@ public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapt
                         -> httpServletResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, e.getMessage()))
                 .and()
                 .authorizeRequests()
-                .antMatchers("/login/**", "/login","/**/find","/**/find/", "/init", "/init/**").permitAll()
+                .antMatchers("/login/**", "/login","/**/find","/**/find/", "/init", "/init/**","/all","/all/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .addFilter(new JwtUserNameAndPasswordAuthenticationFilter(authenticationManager(), jwtConfig, secretKey))
