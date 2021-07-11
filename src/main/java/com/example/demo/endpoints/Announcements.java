@@ -25,18 +25,28 @@ public class Announcements {
 
     @PostMapping
     public ResponseEntity announcements(@RequestBody int timeTableId, @RequestBody String message) {
-        return  ResponseEntity.ok(announcementService.addAnnouncement(timeTableId,message));
+        if (announcementService.addAnnouncement(timeTableId,message)==null){
+            return (ResponseEntity) ResponseEntity.notFound();
+        }else{
+        return  ResponseEntity.ok(announcementService.addAnnouncement(timeTableId,message));}
     }
 
     @GetMapping("/{id}")
     public ResponseEntity get(@PathParam("id") int id){
-        return  ResponseEntity.ok(announcementService.getAnnouncementById(id));
+        if (announcementService.getAnnouncementById(id)==null){
+            return (ResponseEntity) ResponseEntity.notFound();
+        }else {
+        return  ResponseEntity.ok(announcementService.getAnnouncementById(id));}
     }
 
 
     @DeleteMapping("/{id}")
     public ResponseEntity delete(@PathParam("id") int id){
-        return ResponseEntity.ok(announcementService.deleteAnnouncementById(id));
+        if (announcementService.deleteAnnouncementById(id)==null){
+            return (ResponseEntity) ResponseEntity.notFound();
+        }else {
+            return ResponseEntity.ok(announcementService.deleteAnnouncementById(id));
+        }
     }
 
 }

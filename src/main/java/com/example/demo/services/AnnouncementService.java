@@ -14,13 +14,13 @@ public class AnnouncementService {
 
     public Announcement getAnnouncementById(int id){
         return  announcementRepo.findById(id).orElseThrow(()
-                -> new UsernameNotFoundException(String.format("User with Username: %s notfound!", String.valueOf(id))));
+                -> null);
     }
 
     public Announcement deleteAnnouncementById(int id){
         announcementRepo.deleteById(id);
         return  announcementRepo.findById(id).orElseThrow(()
-                -> new UsernameNotFoundException(String.format("User with Username: %s notfound!", String.valueOf(id))));
+                -> null);
     }
 
 
