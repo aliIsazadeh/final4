@@ -2,6 +2,7 @@ package com.example.demo.services;
 
 
 import com.example.demo.model.User;
+import com.example.demo.model.requestBodyModels.AddUser;
 import com.example.demo.repositories.UserRepo;
 import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,17 +37,24 @@ public class UsersService implements UserDetailsService {
     }
 
 
-    public User addUser(User user) {
+    public User addUser(AddUser addUser) throws Exception {
+        User user = new User();
         user.setUsername(getNewUsername());
         String simplePassword = getNewPassword();
         user.setPassword(passwordEncoder.encode(simplePassword));
+        user.setFirstName(addUser.getFirstname());
+        user.setLastName(addUser.getLastname());
+        user.setPhoneNum(addUser.getPhoneNumber());
+        user.setRole(addUser.getRole());
         String smsText = "your username is %s and password is %s";
-        smsText = String.format(smsText, user.getUsername(),simplePassword);
+        smsText = String.format(smsText, user.getUsername(), simplePassword);
         otp.setPhoneNumber(user.getPhoneNum());
         otp.setMessage(smsText);
-        try{
+        try {
             otp.send();
-        }catch (Exception e){}
+        } catch (Exception e) {
+            throw new Exception(e);
+        }
         return userRepo.saveAndFlush(user);
     }
 

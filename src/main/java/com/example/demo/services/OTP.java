@@ -31,6 +31,7 @@ public class OTP {
 
         RestTemplate restTemplate = new RestTemplate();
         String results = restTemplate.getForObject(url, String.class);
+        assert results != null;
         if (results.length()<3)
             throw new Exception("some thing wrong with SMS");
         System.out.println(results);

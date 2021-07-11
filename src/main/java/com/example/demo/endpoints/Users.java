@@ -112,14 +112,26 @@ public class Users {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<User> addUser(@RequestBody AddUser user) {
-//        user.setPassword(passwordEncoder.encode(user.getPassword()));
-//        User added = usersService.addUser(user);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity addUser(@RequestBody AddUser user) {
+        try {
+            User result = usersService.addUser(user);
+            return ResponseEntity.ok(result);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(e.getMessage());
+        }
     }
 
     @PostMapping("/addList")
-    public ResponseEntity addUsers(@RequestBody List<User> users) {
-        return ResponseEntity.ok(usersService.addUsers(users));
+    public ResponseEntity addUsers(@RequestBody List<AddUser> users) {
+        Map<String, Boolean> map = new HashMap<>();
+        users.forEach(addUser -> {
+            try {
+                map.put(usersService.addUser(addUser).getPhoneNum(), true);
+            } catch (Exception e) {
+                map.put(addUser.getPhoneNumber(), false);
+            }
+        });
+        return ResponseEntity.ok().body(map);
     }
+
 }

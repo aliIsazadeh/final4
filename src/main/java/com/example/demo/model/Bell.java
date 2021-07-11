@@ -1,38 +1,24 @@
 package com.example.demo.model;
+
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+@Entity
+@Data
+@NoArgsConstructor
 public class Bell {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public int Id;
     public String Label;
     public int bellOfDay;
 
-    public int getId() {
-        return this.Id;
-    }
-
-    public void setId(int ID) {
-        this.Id = ID;
-    }
-
-    public String getLabel() {
-        return this.Label;
-    }
-
-    public void setLabel(String label) {
-        this.Label = label;
-    }
-
-    public int getbellOfDay() {
-        return this.bellOfDay;
-    }
-
-    public void setbellOfDay(int BoD) {
-        this.bellOfDay = BoD;
-    }
-
-
     public Bell(int bellOfDay) {
         this.bellOfDay = bellOfDay;
-    }
-
-    public Bell() {
     }
 }
