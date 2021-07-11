@@ -21,18 +21,24 @@ public class User implements UserDetails {
     @Getter
     private int id;
     @Getter
+    @Setter
     @Enumerated
     private Role role;
     @Getter
+    @Setter
     private String firstName;
     @Getter
+    @Setter
     private String lastName;
     @Getter
+    @Setter
     @Unique
     private String username;
     @Getter
+    @Setter
     private String password;
     @Getter
+    @Setter
     private String phoneNum;
 
     @Override

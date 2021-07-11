@@ -1,11 +1,14 @@
 package com.example.demo.endpoints;
 
+import com.example.demo.JWT.JwtUtil;
 import com.example.demo.model.User;
 import com.example.demo.services.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -20,12 +23,18 @@ public class Users {
     @Autowired
     private UsersService usersService;
 
+    @Autowired
+    private JwtUtil jwtUtil;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @GetMapping
     public ResponseEntity getAll(@RequestParam(required = false, defaultValue = "") String name,
                                  @RequestParam(required = false, defaultValue = "10") int pageSize,
                                  @RequestParam(required = false, defaultValue = "0") int page) {
         Map<String, Object> data = new HashMap<>();
-        Page<User> resultPage= usersService.getUsers(name,pageSize,page);
+        Page<User> resultPage = usersService.getUsers(name, pageSize, page);
         List<User> users = resultPage.stream().collect(Collectors.toList());
         data.put("list", users);
         data.put("pageSize", resultPage.getNumberOfElements());
@@ -37,13 +46,17 @@ public class Users {
 
     @GetMapping("/{id}")
     public ResponseEntity getUser(@PathVariable int id) {
-        return null;
+        User user = usersService.getUser(String.valueOf(id));
+        if (user == null)
+            return ResponseEntity.notFound().build();
+        else
+            return ResponseEntity.ok(user);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity editUser(@PathVariable int id, @RequestParam User user) {
         User userResult = usersService.editUser(user);
-        if (userResult==null)
+        if (userResult == null)
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         else
             return ResponseEntity.ok(userResult);
@@ -61,18 +74,39 @@ public class Users {
 
     @GetMapping("/profile")
     public ResponseEntity getMyProfile(@RequestHeader("Host") String token) {
-        System.out.println(token);
-        return ResponseEntity.ok(token);
+        String username = jwtUtil.getUsernameFromToken(token);
+        User user = usersService.getUser(username);
+        return ResponseEntity.ok(user);
     }
 
     @PostMapping("/profile")
-    public ResponseEntity editMyProfile() {
-        return null;
+    public ResponseEntity editMyProfile(@RequestHeader("authorization") String token,
+                                        @RequestBody String firstName,
+                                        @RequestBody String lastName,
+                                        @RequestBody String phoneNumber) {
+        String username = jwtUtil.getUsernameFromToken(token);
+        User user = usersService.getUser(username);
+        if (user==null)
+            return ResponseEntity.notFound().build();
+        else{
+            user.setFirstName(firstName);
+            user.setLastName(lastName);
+            user.setPhoneNum(phoneNumber);
+        }
+        return ResponseEntity.ok(usersService.editUser(user));
     }
 
     @PostMapping("/profile/changePassword")
-    public ResponseEntity changeMyPassword(@RequestBody String currentPassword, @RequestBody String newPassword) {
-        return null;
+    public ResponseEntity changeMyPassword(@RequestHeader("authorization") String token,@RequestBody String currentPassword, @RequestBody String newPassword) {
+        String username = jwtUtil.getUsernameFromToken(token);
+        User user = usersService.getUser(username);
+        if (user==null)
+            return ResponseEntity.notFound().build();
+        else if (user.getPassword().equals(passwordEncoder.encode(currentPassword))){
+            user.setPassword(passwordEncoder.encode(newPassword));
+            return ResponseEntity.ok(user);
+        }else
+            return ResponseEntity.notFound().build();
     }
 
     @PostMapping("/add")
@@ -83,6 +117,6 @@ public class Users {
 
     @PostMapping("/addList")
     public ResponseEntity addUsers(@RequestBody List<User> users) {
-        return null;
+        return ResponseEntity.ok(usersService.addUsers(users));
     }
 }

@@ -44,16 +44,14 @@ public class UsersService implements UserDetailsService {
     public User editUser(User newUser) {
         if (userRepo.existsById(newUser.getId()))
             return null;
-        else
-            return userRepo.save(newUser);
+        return userRepo.save(newUser);
     }
-
 
 
     public User getUser(String username) {
         Optional<User> user = userRepo.findByUsername(username);
-        System.out.println("tru to find user:"+username);
-        System.out.println("found User:"+user.isPresent());
+        System.out.println("tru to find user:" + username);
+        System.out.println("found User:" + user.isPresent());
         user.ifPresent(System.out::println);
 
         return user.orElse(null);
@@ -67,10 +65,11 @@ public class UsersService implements UserDetailsService {
         Pageable pageable = PageRequest.of(page, pageSize);
         return userRepo.findByFirstNameContainsOrLastNameContains(name, name, pageable);
     }
-    public String getNewUsername(){
+
+    public String getNewUsername() {
         long count = userRepo.count();
         long base = 985360000;
-        return Long.toString(base+count+1);
+        return Long.toString(base + count + 1);
     }
 
     @Override
