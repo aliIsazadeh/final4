@@ -10,7 +10,6 @@ public class OTP {
     private String phoneNumber = "";
     private String message = "";
 
-
     public void setMessage(String message) {
         String[] temp = message.split(" ");
         StringBuilder mes = new StringBuilder();
@@ -18,7 +17,7 @@ public class OTP {
                 temp) {
             mes.append(str).append("%20");
         }
-        this.message = mes.toString();
+        this.message = mes.toString().trim();
     }
 
     public void setPhoneNumber(String phoneNumber) {
@@ -27,11 +26,13 @@ public class OTP {
         this.phoneNumber = phoneNumber;
     }
 
-    public String send() {
-        String url = "https://raygansms.com/SendMessageWithCode.ashx?Username=a0forghani&Password=1346794613&Mobile=" + phoneNumber + "&Message=" + message;
+    public String send() throws Exception {
+        String url = "https://raygansms.com/SendMessageWithCode.ashx?Username=a0forghani&Password=09145030651&Mobile=" + phoneNumber + "&Message=" + message;
 
         RestTemplate restTemplate = new RestTemplate();
         String results = restTemplate.getForObject(url, String.class);
+        if (results.length()<3)
+            throw new Exception("some thing wrong with SMS");
         System.out.println(results);
         return results;
 //            URL obj = new URL(url);

@@ -14,8 +14,4 @@ public class Auth {
         return ResponseEntity.ok("login url is /login :)") ;
     }
 
-    @PostMapping("/logout")
-    public ResponseEntity logout(@RequestBody String token) {
-        return null;
-    }
 }

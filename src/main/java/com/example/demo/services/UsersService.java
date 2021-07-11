@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 import static com.example.demo.model.Roles.*;
 
@@ -22,6 +23,9 @@ import static com.example.demo.model.Roles.*;
 public class UsersService implements UserDetailsService {
 
     private final PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private OTP otp;
 
     @Autowired
     private UserRepo userRepo;
@@ -33,6 +37,16 @@ public class UsersService implements UserDetailsService {
 
 
     public User addUser(User user) {
+        user.setUsername(getNewUsername());
+        String simplePassword = getNewPassword();
+        user.setPassword(passwordEncoder.encode(simplePassword));
+        String smsText = "your username is %s and password is %s";
+        smsText = String.format(smsText, user.getUsername(),simplePassword);
+        otp.setPhoneNumber(user.getPhoneNum());
+        otp.setMessage(smsText);
+        try{
+            otp.send();
+        }catch (Exception e){}
         return userRepo.saveAndFlush(user);
     }
 
@@ -66,6 +80,15 @@ public class UsersService implements UserDetailsService {
         long count = userRepo.count();
         long base = 985360000;
         return Long.toString(base + count + 1);
+    }
+
+    public String getNewPassword() {
+        String password = "";
+        Random random = new Random();
+        for (int i = 0; i < 6; i++) {
+            password += random.nextInt(10);
+        }
+        return password;
     }
 
     @Override

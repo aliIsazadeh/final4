@@ -2,6 +2,8 @@ package com.example.demo.endpoints;
 
 import com.example.demo.JWT.JwtUtil;
 import com.example.demo.model.User;
+import com.example.demo.model.requestBodyModels.AddUser;
+import com.example.demo.model.requestBodyModels.ChangePasswordUser;
 import com.example.demo.model.requestBodyModels.EditProfileUser;
 import com.example.demo.services.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -80,14 +82,13 @@ public class Users {
     }
 
     @PostMapping("/profile")
-    public ResponseEntity editMyProfile(@RequestHeader("authorization") String token,@RequestBody EditProfileUser body) {
+    public ResponseEntity editMyProfile(@RequestHeader("authorization") String token, @RequestBody EditProfileUser body) {
         String username = jwtUtil.getUsernameFromToken(token);
         User user = usersService.getUser(username);
-        if (user==null){
+        if (user == null) {
             System.out.println("nikdnscjnsdkjncksdjncs");
             return ResponseEntity.notFound().build();
-        }
-        else{
+        } else {
             user.setFirstName(body.getFirstName());
             user.setLastName(body.getLastName());
             user.setPhoneNum(body.getPhoneNumber());
@@ -96,25 +97,25 @@ public class Users {
     }
 
     @PostMapping("/profile/changePassword")
-    public ResponseEntity changeMyPassword(@RequestHeader("Authorization") String token,
-                                           @RequestBody() String currentPassword,
-                                           @RequestBody String newPassword) {
+    public ResponseEntity changeMyPassword(@RequestHeader("authorization") String token,
+                                           @RequestBody ChangePasswordUser body) {
         String username = jwtUtil.getUsernameFromToken(token);
         User user = usersService.getUser(username);
-        if (user==null)
-            return ResponseEntity.notFound().build();
-        else if (user.getPassword().equals(passwordEncoder.encode(currentPassword))){
-            user.setPassword(passwordEncoder.encode(newPassword));
-            return ResponseEntity.ok(user);
-        }else
-            return ResponseEntity.notFound().build();
+        System.out.println("username = " + username);
+        if (user == null)
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+        if (passwordEncoder.matches(body.getCurrentPassword(), user.getPassword())) {
+            user.setPassword(passwordEncoder.encode(body.getNewPassword()));
+            return ResponseEntity.ok(usersService.editUser(user));
+        } else
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
     }
 
     @PostMapping("/add")
-    public ResponseEntity<User> addUser(@RequestBody User user) {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        User added = usersService.addUser(user);
-        return ResponseEntity.ok(added);
+    public ResponseEntity<User> addUser(@RequestBody AddUser user) {
+//        user.setPassword(passwordEncoder.encode(user.getPassword()));
+//        User added = usersService.addUser(user);
+        return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/addList")

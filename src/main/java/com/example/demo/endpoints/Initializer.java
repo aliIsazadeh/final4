@@ -3,9 +3,12 @@ package com.example.demo.endpoints;
 import com.example.demo.JWT.JwtUtil;
 import com.example.demo.model.Role;
 import com.example.demo.model.User;
+import com.example.demo.services.OTP;
 import com.example.demo.services.UsersService;
 import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Random;
 
 @RestController
 public class Initializer {
@@ -21,6 +25,10 @@ public class Initializer {
 
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
+
+    @Autowired
+    private OTP otp;
+
 
     @Autowired
     public Initializer(PasswordEncoder passwordEncoder, UsersService usersService, JwtUtil jwtUtil) {
@@ -48,11 +56,33 @@ public class Initializer {
     }
 
     @GetMapping("/all")
-    public List<User> getAll(){
+    public List<User> getAll() {
         return usersService.getUsers();
-    }   @GetMapping("/test")
-    public String getAll(@RequestHeader("authorization") String token){
-        return jwtUtil.getUsernameFromToken(token);
+    }
 
+    @GetMapping("/test")
+    public String getAll(@RequestHeader("authorization") String token) {
+        return jwtUtil.getUsernameFromToken(token);
+    }
+
+    @GetMapping("/sms/{number}")
+    public ResponseEntity sendSms(@PathVariable("number") String number) {
+        otp.setPhoneNumber(number);
+        String username = usersService.getNewUsername();
+        otp.setMessage(username);
+        String pass = "";
+        Random random = new Random();
+        for (int i = 0; i < 6; i++) {
+            pass += random.nextInt(10);
+        }
+        System.out.println("number = " + number);
+        System.out.println("username = " + username);
+        System.out.println("pass = " + pass);
+        try {
+            System.out.println(otp.send());
+            return ResponseEntity.ok("sms sent");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body("SMS service not available");
+        }
     }
 }
